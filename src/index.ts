@@ -21,6 +21,7 @@ export { RequestStatusCodes } from './types/RequestStatusCodes'
 export { RequestVerbType } from './types/RequestVerbType'
 export { RetryOptions } from './types/RetryOptions'
 export { Token } from './types/Token'
+export { TokenLegacy } from './types/TokenLegacy'
 export { TokenClaims } from './types/TokenClaims'
 export { WrappedRequest } from './types/WrappedRequest'
 
