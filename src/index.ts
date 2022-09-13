@@ -4,7 +4,7 @@
 
 /** Export Commands */
 export { AbstractCommand } from './commands/AbstractCommand'
-export { AuthenticateUserCommand } from './commands/AuthenticateUserCommand'
+export { UserAuthenticateCommand } from './commands/UserAuthenticateCommand'
 
 /** Export Utilities */
 export { demandEnvVar } from './common/utils/EnvironmentUtills'
@@ -15,7 +15,7 @@ export { ExceededRetryCountError } from './errors/ExceededRetryCountError'
 export { UnkownRequestVerb } from './errors/UnkownRequestVerb'
 
 /** Export Types */
-export { AuthenticateUserRequest } from './types/AuthenticateUserRequest'
+export { UserAuthenticateRequest } from './types/UserAuthenticateRequest'
 export { RequestHeaders } from './types/RequestHeaders'
 export { RequestStatusCodes } from './types/RequestStatusCodes'
 export { RequestVerbType } from './types/RequestVerbType'

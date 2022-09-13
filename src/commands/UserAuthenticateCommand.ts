@@ -3,12 +3,12 @@ import { RetryOptions } from '../types/RetryOptions'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentUtills'
-import { AuthenticateUserRequest } from '../types/AuthenticateUserRequest'
+import { UserAuthenticateRequest } from '../types/UserAuthenticateRequest'
 import { Token } from '../types/Token'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { TokenLegacy } from '../types/TokenLegacy'
 
-export class AuthenticateUserCommand extends AbstractCommand<TokenLegacy> {
+export class UserAuthenticateCommand extends AbstractCommand<TokenLegacy> {
   public readonly retryOptions: RetryOptions
 
   public constructor (retryOptions?: RetryOptions) {
@@ -16,7 +16,7 @@ export class AuthenticateUserCommand extends AbstractCommand<TokenLegacy> {
     this.retryOptions = (retryOptions != null) ? retryOptions : { sleepTime: 1, retryCount: 5 }
   }
 
-  public async authenticate (request: AuthenticateUserRequest): Promise<Token> {
+  public async authenticate (request: UserAuthenticateRequest): Promise<Token> {
     const wrappedRequest: WrappedRequest = {
       verb: RequestVerbType.POST_FORM,
       statuses: { allow: [200], retry: [] },

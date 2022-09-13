@@ -1,17 +1,27 @@
-import { AuthenticateUserCommand } from './commands/AuthenticateUserCommand'
+import { UserAuthenticateCommand } from './commands/UserAuthenticateCommand'
 import { RetryOptions } from './types/RetryOptions'
 import { Token } from './types/Token'
-import { AuthenticateUserRequest } from './types/AuthenticateUserRequest'
+import { UserAuthenticateRequest } from './types/UserAuthenticateRequest'
+import { UserRegisterCommand } from './commands/UserRegisterCommand'
+import { User } from './types/User'
+import { UserRegisterRequest } from './types/UserRegisterRequest'
 
 export class RowanTreeAuthServiceClient {
-  readonly #authUserCommand: AuthenticateUserCommand
+  readonly #userAuthCommand: UserAuthenticateCommand
+  readonly #userRegisterCommand: UserRegisterCommand
 
   public constructor (retryOptions?: RetryOptions) {
-    this.#authUserCommand = new AuthenticateUserCommand(retryOptions)
+    this.#userAuthCommand = new UserAuthenticateCommand(retryOptions)
+    this.#userRegisterCommand = new UserRegisterCommand(retryOptions)
   }
 
   public async authUser (userName: string, password: string): Promise<Token> {
-    const request: AuthenticateUserRequest = { password, username: userName }
-    return await this.#authUserCommand.authenticate(request)
+    const request: UserAuthenticateRequest = { password, username: userName }
+    return await this.#userAuthCommand.authenticate(request)
+  }
+
+  public async registerUser (userName: string, password: string, email: string): Promise<User> {
+    const request: UserRegisterRequest = { password, username: userName, email }
+    return await this.#userRegisterCommand.register(request)
   }
 }
