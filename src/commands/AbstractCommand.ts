@@ -7,20 +7,22 @@ import { UnkownRequestVerb } from '../errors/UnkownRequestVerb'
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios'
 import { RequestFailureError } from '../errors/RequestFailureError'
 import FormData from 'form-data'
+import { WrappedResponse } from '../types/WrappedResponse'
 
 // https://github.com/axios/axios/issues/3612
 export function isAxiosError (error: unknown): error is AxiosError {
   return axios.isAxiosError(error)
 }
 
-export abstract class AbstractCommand<TResponse> {
-  protected async apiCaller (wrappedRequest: WrappedRequest, retryOptions: RetryOptions): Promise<TResponse | undefined> {
+export abstract class AbstractCommand<TDataType> {
+  protected async apiCaller (wrappedRequest: WrappedRequest, retryOptions: RetryOptions): Promise<WrappedResponse<TDataType>> {
     if (retryOptions.retryCount < 1) {
       throw new ExceededRetryCountError(JSON.stringify({ message: 'Exceeded retries', request: this.redact(wrappedRequest), options: retryOptions }))
     }
     retryOptions.retryCount--
 
     let response: AxiosResponse
+    const wrappedResponse: WrappedResponse<TDataType> = {}
 
     try {
       const config: AxiosRequestConfig = { timeout: wrappedRequest.timeout * 1000 }
@@ -59,7 +61,9 @@ export abstract class AbstractCommand<TResponse> {
             // Review success cases (Which might be exception inducing, 4xx, etc)
             // The payload could be anything, probable error details.
             console.log(error.response?.data)
-            return undefined
+            wrappedResponse.status = error.response?.status
+            wrappedResponse.code = error.code
+            return wrappedResponse
           } else if (wrappedRequest.statuses.retry.includes(error.response?.status)) {
             // Review failure cases
             console.log(`Received a retryable (${retryOptions.retryCount}) status code (${error.response?.status}), trying ...`)
@@ -78,7 +82,9 @@ export abstract class AbstractCommand<TResponse> {
     }
 
     if (wrappedRequest.statuses.allow.includes(response.status)) {
-      return response.data
+      wrappedResponse.data = response.data
+      wrappedResponse.status = response.status
+      return wrappedResponse
     }
 
     throw new RequestFailureError(JSON.stringify({ status_code: response.status, request: this.redact(wrappedRequest), options: retryOptions }))

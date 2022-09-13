@@ -7,6 +7,7 @@ import { UserAuthenticateRequest } from '../types/UserAuthenticateRequest'
 import { Token } from '../types/Token'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { TokenLegacy } from '../types/TokenLegacy'
+import { WrappedResponse } from '../types/WrappedResponse'
 
 export class UserAuthenticateCommand extends AbstractCommand<TokenLegacy> {
   public readonly retryOptions: RetryOptions
@@ -24,17 +25,17 @@ export class UserAuthenticateCommand extends AbstractCommand<TokenLegacy> {
       data: { username: request.username, password: request.password },
       timeout: demandEnvVarAsNumber('ACCESS_AUTH_ENDPOINT_TIMEOUT')
     }
-    const tokenLegacy: TokenLegacy | undefined = await this.invokeRequest(wrappedRequest)
-    if (tokenLegacy === undefined) {
-      throw new CommandFailedError('Authenticate user command failed unexpectedly')
+    const wrappedTokenLegacy: WrappedResponse<TokenLegacy> = await this.invokeRequest(wrappedRequest)
+    if ((wrappedTokenLegacy?.data) != null) {
+      return {
+        accessToken: wrappedTokenLegacy.data.access_token,
+        tokenType: wrappedTokenLegacy.data.token_type
+      }
     }
-    return {
-      accessToken: tokenLegacy.access_token,
-      tokenType: tokenLegacy.token_type
-    }
+    throw new CommandFailedError('Authenticate user command failed unexpectedly')
   }
 
-  private async invokeRequest (wrappedRequest: WrappedRequest): Promise<TokenLegacy | undefined> {
+  private async invokeRequest (wrappedRequest: WrappedRequest): Promise<WrappedResponse<TokenLegacy>> {
     return await this.apiCaller(wrappedRequest, { ...this.retryOptions })
   }
 }

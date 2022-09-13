@@ -6,6 +6,7 @@ import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentU
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { UserRegisterRequest } from '../types/UserRegisterRequest'
 import { User } from '../types/User'
+import { WrappedResponse } from '../types/WrappedResponse'
 
 export class UserRegisterCommand extends AbstractCommand<User> {
   public readonly retryOptions: RetryOptions
@@ -17,20 +18,20 @@ export class UserRegisterCommand extends AbstractCommand<User> {
 
   public async register (request: UserRegisterRequest): Promise<User> {
     const wrappedRequest: WrappedRequest = {
-      verb: RequestVerbType.POST,
+      verb: RequestVerbType.POST_FORM,
       statuses: { allow: [200], retry: [] },
       url: `${demandEnvVar('ACCESS_AUTH_ENDPOINT')}/v1/auth/register`,
-      data: request,
+      data: { username: request.username, password: request.password, email: request.email },
       timeout: demandEnvVarAsNumber('ACCESS_AUTH_ENDPOINT_TIMEOUT')
     }
-    const user: User | undefined = await this.invokeRequest(wrappedRequest)
-    if (user === undefined) {
-      throw new CommandFailedError('Register user command failed unexpectedly')
+    const wrappedUser: WrappedResponse<User> = await this.invokeRequest(wrappedRequest)
+    if (wrappedUser.data != null) {
+      return wrappedUser.data
     }
-    return user
+    throw new CommandFailedError('Register user command failed unexpectedly')
   }
 
-  private async invokeRequest (wrappedRequest: WrappedRequest): Promise<User | undefined> {
+  private async invokeRequest (wrappedRequest: WrappedRequest): Promise<WrappedResponse<User>> {
     return await this.apiCaller(wrappedRequest, { ...this.retryOptions })
   }
 }
