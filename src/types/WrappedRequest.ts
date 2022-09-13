@@ -6,7 +6,5 @@ export interface WrappedRequest {
     verb: RequestVerbType;
     statuses: RequestStatusCodes;
     url: string;
-    data: any;
-
-
+    data: Record<string, string> | any;
 }
