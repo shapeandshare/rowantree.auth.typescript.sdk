@@ -1,7 +1,7 @@
 import { RetryOptions } from '../types/RetryOptions'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { RequestVerbType } from '../types/RequestVerbType'
-import { UnkownRequestVerb } from '../errors/UnkownRequestVerb'
+import { UnknownRequestVerb } from '../errors/UnknownRequestVerb'
 
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios'
 import FormData from 'form-data'
@@ -59,7 +59,7 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
           break
         }
         default: {
-          throw new UnkownRequestVerb(wrappedRequest.verb)
+          throw new UnknownRequestVerb(wrappedRequest.verb)
         }
       }
     } catch (error: unknown) {
