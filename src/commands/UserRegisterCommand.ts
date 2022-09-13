@@ -8,7 +8,7 @@ import { UserRegisterRequest } from '../types/UserRegisterRequest'
 import { User } from '../types/User'
 import { WrappedResponse } from '../types/WrappedResponse'
 
-export class UserRegisterCommand extends AbstractCommand<User> {
+export class UserRegisterCommand extends AbstractCommand<User, UserRegisterRequest> {
   public readonly retryOptions: RetryOptions
 
   public constructor (retryOptions?: RetryOptions) {
@@ -17,7 +17,7 @@ export class UserRegisterCommand extends AbstractCommand<User> {
   }
 
   public async register (request: UserRegisterRequest): Promise<User> {
-    const wrappedRequest: WrappedRequest = {
+    const wrappedRequest: WrappedRequest<UserRegisterRequest> = {
       verb: RequestVerbType.POST_FORM,
       statuses: { allow: [200], retry: [] },
       url: `${demandEnvVar('ACCESS_AUTH_ENDPOINT')}/v1/auth/register`,
@@ -25,13 +25,13 @@ export class UserRegisterCommand extends AbstractCommand<User> {
       timeout: demandEnvVarAsNumber('ACCESS_AUTH_ENDPOINT_TIMEOUT')
     }
     const wrappedUser: WrappedResponse<User> = await this.invokeRequest(wrappedRequest)
-    if (wrappedUser.data != null) {
+    if (wrappedUser.data !== undefined) {
       return wrappedUser.data
     }
     throw new CommandFailedError('Register user command failed unexpectedly')
   }
 
-  private async invokeRequest (wrappedRequest: WrappedRequest): Promise<WrappedResponse<User>> {
+  private async invokeRequest (wrappedRequest: WrappedRequest<UserRegisterRequest>): Promise<WrappedResponse<User>> {
     return await this.apiCaller(wrappedRequest, { ...this.retryOptions })
   }
 }

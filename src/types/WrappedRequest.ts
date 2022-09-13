@@ -1,10 +1,10 @@
 import { RequestVerbType } from './RequestVerbType'
 import { RequestStatusCodes } from './RequestStatusCodes'
 
-export interface WrappedRequest {
+export interface WrappedRequest<TDataType> {
   verb: RequestVerbType
   statuses: RequestStatusCodes
   url: string
-  data: Record<string, string> | any
+  data: TDataType
   timeout: number
 }
