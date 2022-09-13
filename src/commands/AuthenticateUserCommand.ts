@@ -1,12 +1,12 @@
 import { AbstractCommand } from './AbstractCommand'
-import { Token } from '../types/Token'
-import { AuthenticateUserRequest } from '../types/AuthenticateUserRequest'
 import { RetryOptions } from '../types/RetryOptions'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { demandEnvVar } from '../common/utils/EnvironmentUtills'
+import { AuthenticateUserRequest } from '../types/AuthenticateUserRequest'
+import { Token } from '../types/Token'
 
-export class AuthenicateUserCommand extends AbstractCommand<AuthenticateUserRequest, Token> {
+export class AuthenticateUserCommand extends AbstractCommand {
   public constructor (retryOptions?: RetryOptions) {
     super()
     this.retryOptions = retryOptions

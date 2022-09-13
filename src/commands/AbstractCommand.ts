@@ -5,15 +5,12 @@ import { ExceededRetryCountError } from '../errors/ExceededRetryCountError'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { UnkownRequestVerb } from '../errors/UnkownRequestVerb'
 
-// import axios,{ AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios, { AxiosResponse } from 'axios'
 import { RequestFailureError } from '../errors/RequestFailureError'
-// const FormData = require('form-data')
 import FormData from 'form-data'
 
-export abstract class AbstractCommand<TRequest, TResponse> {
+export abstract class AbstractCommand {
   public retryOptions?: RetryOptions
-  public abstract authenticate (request: TRequest): Promise<TResponse>
 
   protected async apiCaller (wrappedRequest: WrappedRequest, retryCount: number): Promise<Token> {
     if (retryCount < 1) {
@@ -29,8 +26,6 @@ export abstract class AbstractCommand<TRequest, TResponse> {
         break
       }
       case RequestVerbType.POST: {
-        // const config: AxiosRequestConfig<any> = {};
-        // response = await axios.post(wrappedRequest.url, wrappedRequest.data, config);
         response = await axios.post(wrappedRequest.url, wrappedRequest.data)
 
         if (wrappedRequest.statuses.allow.includes(response.status)) {
