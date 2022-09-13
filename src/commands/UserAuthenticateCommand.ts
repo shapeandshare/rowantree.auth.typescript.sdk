@@ -1,5 +1,4 @@
 import { AbstractCommand } from './AbstractCommand'
-import { RetryOptions } from '../types/RetryOptions'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentUtills'
@@ -9,14 +8,7 @@ import { CommandFailedError } from '../errors/CommandFailedError'
 import { TokenLegacy } from '../types/TokenLegacy'
 import { WrappedResponse } from '../types/WrappedResponse'
 
-export class UserAuthenticateCommand extends AbstractCommand<TokenLegacy, UserAuthenticateRequest> {
-  public readonly retryOptions: RetryOptions
-
-  public constructor (retryOptions?: RetryOptions) {
-    super()
-    this.retryOptions = (retryOptions != null) ? retryOptions : { sleepTime: 1, retryCount: 5 }
-  }
-
+export class UserAuthenticateCommand extends AbstractCommand<UserAuthenticateRequest, TokenLegacy> {
   public async authenticate (request: UserAuthenticateRequest): Promise<Token> {
     const wrappedRequest: WrappedRequest<UserAuthenticateRequest> = {
       verb: RequestVerbType.POST_FORM,
@@ -32,10 +24,6 @@ export class UserAuthenticateCommand extends AbstractCommand<TokenLegacy, UserAu
         tokenType: wrappedTokenLegacy.data.token_type
       }
     }
-    throw new CommandFailedError('Authenticate user command failed unexpectedly')
-  }
-
-  private async invokeRequest (wrappedRequest: WrappedRequest<UserAuthenticateRequest>): Promise<WrappedResponse<TokenLegacy>> {
-    return await this.apiCaller(wrappedRequest, { ...this.retryOptions })
+    throw new CommandFailedError(`Authenticate user command failed unexpectedly: ${JSON.stringify(wrappedTokenLegacy)}`)
   }
 }

@@ -1,5 +1,4 @@
 import { AbstractCommand } from './AbstractCommand'
-import { RetryOptions } from '../types/RetryOptions'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentUtills'
@@ -8,14 +7,7 @@ import { UserRegisterRequest } from '../types/UserRegisterRequest'
 import { User } from '../types/User'
 import { WrappedResponse } from '../types/WrappedResponse'
 
-export class UserRegisterCommand extends AbstractCommand<User, UserRegisterRequest> {
-  public readonly retryOptions: RetryOptions
-
-  public constructor (retryOptions?: RetryOptions) {
-    super()
-    this.retryOptions = (retryOptions != null) ? retryOptions : { sleepTime: 1, retryCount: 5 }
-  }
-
+export class UserRegisterCommand extends AbstractCommand<UserRegisterRequest, User> {
   public async register (request: UserRegisterRequest): Promise<User> {
     const wrappedRequest: WrappedRequest<UserRegisterRequest> = {
       verb: RequestVerbType.POST_FORM,
@@ -28,10 +20,6 @@ export class UserRegisterCommand extends AbstractCommand<User, UserRegisterReque
     if (wrappedUser.data !== undefined) {
       return wrappedUser.data
     }
-    throw new CommandFailedError('Register user command failed unexpectedly')
-  }
-
-  private async invokeRequest (wrappedRequest: WrappedRequest<UserRegisterRequest>): Promise<WrappedResponse<User>> {
-    return await this.apiCaller(wrappedRequest, { ...this.retryOptions })
+    throw new CommandFailedError(`Register user command failed unexpectedly: ${JSON.stringify(wrappedUser)}`)
   }
 }

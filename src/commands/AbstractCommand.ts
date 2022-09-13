@@ -12,10 +12,19 @@ export function isAxiosError (error: unknown): error is AxiosError {
   return axios.isAxiosError(error)
 }
 
-export abstract class AbstractCommand<TResponseDataType, TRequestDataType> {
-  protected async apiCaller (wrappedRequest: WrappedRequest<TRequestDataType>, retryOptions: RetryOptions): Promise<WrappedResponse<TResponseDataType>> {
+export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
+  public readonly retryOptions: RetryOptions
+
+  public constructor (retryOptions?: RetryOptions) {
+    this.retryOptions = (retryOptions != null) ? retryOptions : { sleepTime: 1, retryCount: 5 }
+  }
+
+  protected async invokeRequest (wrappedRequest: WrappedRequest<TRequestDataType>, retryOptions?: RetryOptions): Promise<WrappedResponse<TResponseDataType>> {
     let response: AxiosResponse
     const wrappedResponse: WrappedResponse<TResponseDataType> = {}
+
+    // Use the passed in options, otherwise go to the defaults.
+    retryOptions = (retryOptions != null) ? retryOptions : { ...this.retryOptions }
 
     if (retryOptions.retryCount < 1) {
       // We've exceeded our retries, we will return an empty wrapped response.  The command can decide how to handle this scenario.
@@ -67,7 +76,7 @@ export abstract class AbstractCommand<TResponseDataType, TRequestDataType> {
             // Review failure cases
             console.log(`Received a retryable (${retryOptions.retryCount}) status code (${error.response?.status}), trying ...`)
             await this.delay(retryOptions.sleepTime)
-            return await this.apiCaller(wrappedRequest, retryOptions)
+            return await this.invokeRequest(wrappedRequest, retryOptions)
           } else {
             console.log(`Not retrying after receiving status code (${error.response?.status}).`)
             wrappedResponse.status = error.response?.status
@@ -77,7 +86,7 @@ export abstract class AbstractCommand<TResponseDataType, TRequestDataType> {
         } else {
           console.log(`Failed to make request (${retryOptions.retryCount}) code (${String(error.code)}) (${JSON.stringify(error)}), trying ...`)
           await this.delay(retryOptions.sleepTime)
-          return await this.apiCaller(wrappedRequest, retryOptions)
+          return await this.invokeRequest(wrappedRequest, retryOptions)
         }
       }
       // We encountered some kind of non-axios error..
