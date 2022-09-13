@@ -18,6 +18,8 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "ES2021",
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
     "typeRoots": ["node_modules/@types"]
   },
   "exclude": ["node_modules", "dist"],

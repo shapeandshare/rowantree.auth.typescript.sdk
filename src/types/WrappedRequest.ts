@@ -1,10 +1,9 @@
-import {RequestVerbType} from "./RequestVerbType";
-import {RequestStatusCodes} from "./RequestStatusCodes";
-
+import { RequestVerbType } from './RequestVerbType'
+import { RequestStatusCodes } from './RequestStatusCodes'
 
 export interface WrappedRequest {
-    verb: RequestVerbType;
-    statuses: RequestStatusCodes;
-    url: string;
-    data: Record<string, string> | any;
+  verb: RequestVerbType
+  statuses: RequestStatusCodes
+  url: string
+  data: Record<string, string> | any
 }

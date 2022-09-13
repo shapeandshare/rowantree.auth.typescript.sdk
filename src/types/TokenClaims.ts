@@ -3,11 +3,11 @@ Token Claims Type
  */
 
 export interface TokenClaims {
-        sub: string;
-        iss: string;
-        exp: string;
+  sub: string
+  iss: string
+  exp: string
 
-        // TODO: move to scopes
-        disabled: boolean;
-        admin: boolean;
+  // TODO: move to scopes
+  disabled: boolean
+  admin: boolean
 }

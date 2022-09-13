@@ -1,6 +1,5 @@
 
-
 export interface RetryOptions {
-    readonly sleepTime: number;
-    readonly retryCount: number;
+  readonly sleepTime: number
+  readonly retryCount: number
 }

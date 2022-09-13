@@ -1,6 +1,5 @@
-import {HeadersDefaults} from 'axios';
-
+import { HeadersDefaults } from 'axios'
 
 export interface RequestHeaders extends HeadersDefaults {
-    Authorization: string;
+  Authorization: string
 }

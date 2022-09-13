@@ -1,9 +1,5 @@
 
-
-
-
 export interface RequestStatusCodes {
-    allow: number[];
-    retry: number[];
+  allow: number[]
+  retry: number[]
 }
-

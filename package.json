@@ -29,14 +29,6 @@
   "lint-staged": {
     "*.ts": "eslint --fix"
   },
-  "eslintConfig": {
-    "parserOptions": {
-      "project": [
-        "tscofig.json",
-        "test/tsconfig.json"
-      ]
-    }
-  },
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/chai": "^4.3.3",

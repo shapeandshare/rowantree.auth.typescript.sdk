@@ -3,6 +3,6 @@ Token Interface
  */
 
 export interface Token {
-    accessToken: string;
-    tokenType: string;
+  accessToken: string
+  tokenType: string
 }
