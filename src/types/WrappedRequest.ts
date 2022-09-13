@@ -6,4 +6,5 @@ export interface WrappedRequest {
   statuses: RequestStatusCodes
   url: string
   data: Record<string, string> | any
+  timeout: number
 }

@@ -4,7 +4,7 @@ import { ExceededRetryCountError } from '../errors/ExceededRetryCountError'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { UnkownRequestVerb } from '../errors/UnkownRequestVerb'
 
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios'
 import { RequestFailureError } from '../errors/RequestFailureError'
 import FormData from 'form-data'
 
@@ -23,13 +23,14 @@ export abstract class AbstractCommand<TResponse> {
     let response: AxiosResponse
 
     try {
+      const config: AxiosRequestConfig = { timeout: wrappedRequest.timeout * 1000 }
       switch (wrappedRequest.verb) {
         case RequestVerbType.GET: {
-          response = await axios.get(wrappedRequest.url)
+          response = await axios.get(wrappedRequest.url, config)
           break
         }
         case RequestVerbType.POST: {
-          response = await axios.post(wrappedRequest.url, wrappedRequest.data)
+          response = await axios.post(wrappedRequest.url, wrappedRequest.data, config)
           break
         }
         case RequestVerbType.POST_FORM: {
@@ -40,11 +41,11 @@ export abstract class AbstractCommand<TResponse> {
             form.append(key, value)
           }
 
-          response = await axios.post(wrappedRequest.url, form)
+          response = await axios.post(wrappedRequest.url, form, config)
           break
         }
         case RequestVerbType.DELETE: {
-          response = await axios.delete(wrappedRequest.url)
+          response = await axios.delete(wrappedRequest.url, config)
           break
         }
         default: {
