@@ -13,7 +13,9 @@ describe('Auth Service Client Tests', function (): void {
   describe('Authenticate User Command Tests', function () {
     describe('authUser', function () {
       it('should authenticate a user', async function (): Promise<void> {
-        const token: Token = await client.authUser('joshburt', 'ed407fad')
+        const username: string = 'mockuser'
+        const password: string = 'mockpassword'
+        const token: Token = await client.authUser(username, password)
         console.log(token)
       })
     })
