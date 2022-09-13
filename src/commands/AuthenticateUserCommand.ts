@@ -15,7 +15,7 @@ export class AuthenticateUserCommand extends AbstractCommand {
   public async authenticate (request: AuthenticateUserRequest): Promise<Token> {
     const wrappedRequest: WrappedRequest = {
       verb: RequestVerbType.POST_FORM,
-      statuses: { allow: [], retry: [] },
+      statuses: { allow: [200], retry: [] },
       url: `${demandEnvVar('ACCESS_AUTH_ENDPOINT')}/v1/auth/token`,
       data: { username: request.username, password: request.password }
     }
