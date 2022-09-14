@@ -42,6 +42,8 @@ jobs:
     - name: Run Linting
       run: |
         npm run lint
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
 # TODO: Enable once tests are defined
 #    - name: Run Tests
 #      run: |
