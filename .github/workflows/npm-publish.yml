@@ -32,6 +32,5 @@ jobs:
         npm run pack
     - name: Publish package
       run:  |
+        npm config set _authToken=${{ secrets.NPM_API_TOKEN }}
         npm publish
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
