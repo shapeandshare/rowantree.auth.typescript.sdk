@@ -29,8 +29,6 @@ jobs:
         npm ci
     - name: Build package
       run: npm run pack
-    - name: Publish package
-      run: |
-        npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    - uses: JS-DevTools/npm-publish@v1
+      with:
+        token: ${{secrets.NPM_API_TOKEN}}
