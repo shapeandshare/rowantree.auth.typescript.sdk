@@ -32,9 +32,13 @@ jobs:
     - name: Install dependencies
       run: |
         npm ci
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
     - name: Run Auditing
       run: |
         npm run audit
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
     - name: Run Linting
       run: |
         npm run lint
