@@ -14,7 +14,6 @@ export { demandEnvVar, demandEnvVarAsNumber } from './common/utils/EnvironmentUt
 export { UnknownRequestVerb } from './errors/UnknownRequestVerb'
 export { CommandFailedError } from './errors/CommandFailedError'
 
-
 /** Export Types */
 export { RequestHeaders } from './types/RequestHeaders'
 export { RequestStatusCodes } from './types/RequestStatusCodes'
