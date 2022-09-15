@@ -18,7 +18,7 @@ export class UserRegisterCommand extends AbstractCommand<UserRegisterRequest, Us
       timeout: demandEnvVarAsNumber('ACCESS_AUTH_ENDPOINT_TIMEOUT')
     }
     const wrappedResponse: WrappedResponse<User> = await this.invokeRequest(wrappedRequest)
-    if ((wrappedResponse.state == ResponseStateType.SUCCESS) && (wrappedResponse.data !== undefined)) {
+    if ((wrappedResponse.state === ResponseStateType.SUCCESS) && (wrappedResponse.data !== undefined)) {
       return wrappedResponse.data
     }
     throw new CommandFailedError(`Register user command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
