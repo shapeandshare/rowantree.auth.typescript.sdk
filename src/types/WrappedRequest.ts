@@ -5,6 +5,6 @@ export interface WrappedRequest<TDataType> {
   verb: RequestVerbType
   statuses: RequestStatusCodes
   url: string
-  data: TDataType
+  data?: TDataType
   timeout: number
 }
