@@ -25,7 +25,7 @@ describe('Auth Service Client Tests', function (): void {
   describe('Register User Command Tests', function () {
     describe('userRegister', function () {
       it('should register a user', async function (): Promise<void> {
-        const username: string = 'mockuserfour'
+        const username: string = 'mockusersix'
         const password: string = 'mockpassword'
         const email: string = 'mock@mock.local'
         const user: User = await client.registerUser(username, password, email)

@@ -6,6 +6,7 @@ import { CommandFailedError } from '../errors/CommandFailedError'
 import { UserRegisterRequest } from '../types/UserRegisterRequest'
 import { User } from '../types/User'
 import { WrappedResponse } from '../types/WrappedResponse'
+import { ResponseStateType } from '../types/ResponseStateType'
 
 export class UserRegisterCommand extends AbstractCommand<UserRegisterRequest, User> {
   public async register (request: UserRegisterRequest): Promise<User> {
@@ -13,13 +14,13 @@ export class UserRegisterCommand extends AbstractCommand<UserRegisterRequest, Us
       verb: RequestVerbType.POST_FORM,
       statuses: { allow: [200], retry: [] },
       url: `${demandEnvVar('ACCESS_AUTH_ENDPOINT')}/v1/auth/register`,
-      data: { username: request.username, password: request.password, email: request.email },
+      data: request,
       timeout: demandEnvVarAsNumber('ACCESS_AUTH_ENDPOINT_TIMEOUT')
     }
-    const wrappedUser: WrappedResponse<User> = await this.invokeRequest(wrappedRequest)
-    if (wrappedUser.data !== undefined) {
-      return wrappedUser.data
+    const wrappedResponse: WrappedResponse<User> = await this.invokeRequest(wrappedRequest)
+    if ((wrappedResponse.state == ResponseStateType.SUCCESS) && (wrappedResponse.data !== undefined)) {
+      return wrappedResponse.data
     }
-    throw new CommandFailedError(`Register user command failed unexpectedly: ${JSON.stringify(wrappedUser)}`)
+    throw new CommandFailedError(`Register user command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
   }
 }
