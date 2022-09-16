@@ -1,5 +1,5 @@
 import { UserAuthenticateCommand } from './commands/UserAuthenticateCommand'
-import { RetryOptions } from './types/RetryOptions'
+import { CommandOptions } from './types/CommandOptions'
 import { Token } from './types/Token'
 import { UserAuthenticateRequest } from './types/UserAuthenticateRequest'
 import { UserRegisterCommand } from './commands/UserRegisterCommand'
@@ -12,9 +12,9 @@ export class RowanTreeAuthServiceClient {
   readonly #userAuthCommand: UserAuthenticateCommand
   readonly #userRegisterCommand: UserRegisterCommand
 
-  public constructor (retryOptions?: RetryOptions) {
-    this.#userAuthCommand = new UserAuthenticateCommand(retryOptions)
-    this.#userRegisterCommand = new UserRegisterCommand(retryOptions)
+  public constructor (options?: CommandOptions) {
+    this.#userAuthCommand = new UserAuthenticateCommand(options)
+    this.#userRegisterCommand = new UserRegisterCommand(options)
   }
 
   public async authUser (userName: string, password: string): Promise<Token> {
