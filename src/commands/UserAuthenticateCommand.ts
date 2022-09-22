@@ -12,7 +12,7 @@ export class UserAuthenticateCommand extends AbstractCommand<UserAuthenticateReq
     const wrappedRequest: WrappedRequest<UserAuthenticateRequest> = {
       verb: RequestVerbType.POST_FORM,
       statuses: { allow: [200], retry: [] },
-      url: `${this.options.endpoint}/v1/auth/token`,
+      url: `https://api.${this.options.tld}/auth/v1/token`,
       data: request,
       timeout: this.options.timeout
     }
