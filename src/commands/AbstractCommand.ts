@@ -88,7 +88,6 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
           const value: string = (wrappedRequest.data as Record<string, string>)[key]
           form.append(key, value)
         }
-
         return await axios.post(wrappedRequest.url, form, config)
       }
       case RequestVerbType.DELETE: {

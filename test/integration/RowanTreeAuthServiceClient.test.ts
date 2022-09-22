@@ -6,7 +6,7 @@ import { User } from '../../src/types/User'
 config({ path: 'env/.env.offline' })
 
 describe('Auth Service Client Tests', function (): void {
-  const client: RowanTreeAuthServiceClient = new RowanTreeAuthServiceClient({ sleepTime: 2, retryCount: 5 })
+  const client: RowanTreeAuthServiceClient = new RowanTreeAuthServiceClient({ sleepTime: 2, retryCount: 5, timeout: 5, tld: '<<>>' })
 
   before(async function (): Promise<void> {})
   after(async function (): Promise<void> {})
@@ -22,12 +22,12 @@ describe('Auth Service Client Tests', function (): void {
     })
   })
 
-  describe('Register User Command Tests', function () {
+  describe.only('Register User Command Tests', function () {
     describe('userRegister', function () {
       it('should register a user', async function (): Promise<void> {
-        const username: string = 'mockusersix'
-        const password: string = 'mockpassword'
-        const email: string = 'mock@mock.local'
+        const username: string = 'test'
+        const password: string = 'test'
+        const email: string = 'test@localhost.local'
         const user: User = await client.registerUser(username, password, email)
         console.log(user)
       })
