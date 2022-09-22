@@ -12,7 +12,7 @@ export class UserRegisterCommand extends AbstractCommand<UserRegisterRequest, Us
     const wrappedRequest: WrappedRequest<UserRegisterRequest> = {
       verb: RequestVerbType.POST_FORM,
       statuses: { allow: [200], retry: [] },
-      url: `${this.options.endpoint}/v1/auth/register`,
+      url: `https://api.${this.options.tld}/auth/v1/register`,
       data: request,
       timeout: this.options.timeout
     }

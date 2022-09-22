@@ -23,7 +23,7 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
       : {
           sleepTime: demandEnvVarAsNumber('ACCESS_AUTH_ENDPOINT_SLEEP'),
           retryCount: demandEnvVarAsNumber('ACCESS_AUTH_ENDPOINT_RETRY'),
-          endpoint: demandEnvVar('ACCESS_AUTH_ENDPOINT'),
+          tld: demandEnvVar('ROWANTREE_TLD'),
           timeout: demandEnvVarAsNumber('ACCESS_AUTH_ENDPOINT_TIMEOUT')
         }
   }
