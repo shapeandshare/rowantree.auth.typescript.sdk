@@ -11,7 +11,7 @@ export class UserAuthenticateCommand extends AbstractCommand<UserAuthenticateReq
   public async authenticate (request: UserAuthenticateRequest): Promise<Token> {
     const wrappedRequest: WrappedRequest<UserAuthenticateRequest> = {
       verb: RequestVerbType.POST_FORM,
-      statuses: { allow: [200], retry: [] },
+      statuses: { allow: [200], retry: [0, 503] },
       url: `https://api.${this.options.tld}/auth/v1/token`,
       data: request,
       timeout: this.options.timeout
