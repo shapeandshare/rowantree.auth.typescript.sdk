@@ -15,7 +15,6 @@ export { UnknownRequestVerb } from './errors/UnknownRequestVerb'
 export { CommandFailedError } from './errors/CommandFailedError'
 
 /** Export Types */
-export { RequestHeaders } from './types/RequestHeaders'
 export { RequestStatusCodes } from './types/RequestStatusCodes'
 export { RequestVerbType } from './types/RequestVerbType'
 export { CommandOptions } from './types/CommandOptions'

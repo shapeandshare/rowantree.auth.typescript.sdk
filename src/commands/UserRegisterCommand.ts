@@ -11,7 +11,7 @@ export class UserRegisterCommand extends AbstractCommand<UserRegisterRequest, Us
   public async register (request: UserRegisterRequest): Promise<User> {
     const wrappedRequest: WrappedRequest<UserRegisterRequest> = {
       verb: RequestVerbType.POST_FORM,
-      statuses: { allow: [200], retry: [] },
+      statuses: { allow: [200], retry: [0, 503] },
       url: `https://api.${this.options.tld}/auth/v1/register`,
       data: request,
       timeout: this.options.timeout
